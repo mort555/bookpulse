@@ -91,3 +91,32 @@ omit = ["app/main.py"]
 [tool.coverage.report]
 show_missing = true
 fail_under = 80
+[tool.importlinter]
+root_packages = ["app"]
+
+[[tool.importlinter.contracts]]
+name = "Domain must be independent"
+type = "forbidden"
+source_modules = ["app.domain"]
+forbidden_modules = [
+    "app.api",
+    "app.core",
+    "app.infra",
+    "app.repositories",
+    "app.services",
+    "app.tasks",
+]
+
+[[tool.importlinter.contracts]]
+name = "Application modules must not import main"
+type = "forbidden"
+source_modules = [
+    "app.api",
+    "app.core",
+    "app.domain",
+    "app.infra",
+    "app.repositories",
+    "app.services",
+    "app.tasks",
+]
+forbidden_modules = ["app.main"]

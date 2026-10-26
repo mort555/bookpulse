@@ -6,26 +6,22 @@ import redis
 import structlog
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.responses import Response
 from structlog.contextvars import bind_contextvars, clear_contextvars
 
+from app.api.routers.supplier import router as suppliers_router
 from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
+from app.infra.database.session import engine
 
 configure_logging()
 
 settings = get_settings()
 logger = structlog.get_logger()
 
-engine = create_engine(
-    settings.database_url,
-    pool_pre_ping=True,
-    pool_size=5,
-    max_overflow=10,
-)
 
 redis_client = redis.Redis.from_url(
     settings.redis_url,
@@ -52,6 +48,10 @@ app = FastAPI(
 )
 
 register_exception_handlers(app)
+app.include_router(
+    suppliers_router,
+    prefix=settings.api_v1_prefix,
+)
 
 
 @app.middleware("http")

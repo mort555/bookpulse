@@ -1,4 +1,3 @@
-
 .PHONY: up down test lint migrate seed
 
 up:
@@ -14,7 +13,7 @@ lint:
 	uv run ruff check .
 	uv run ruff format --check .
 	uv run mypy app
-	uv run lint-imports
+	uv run lint-imports --config pyproject.toml
 
 migrate:
 	uv run alembic upgrade head
