@@ -1,0 +1,12 @@
+
+[importlinter]
+root_package = app
+
+[[contracts]]
+name = Layered architecture
+type = layers
+layers =
+    app.api
+    app.services
+    app.repositories
+    app.domain
