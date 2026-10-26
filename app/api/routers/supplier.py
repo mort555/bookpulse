@@ -1,10 +1,11 @@
 from typing import Annotated
 
+from fastapi import APIRouter, Depends, Query, status
+
 from app.api.dependencies import get_supplier_service
 from app.api.schemas.supplier import SupplierCreate, SupplierRead
 from app.core.exceptions import NotFoundError
 from app.services.supplier_service import SupplierService
-from fastapi import APIRouter, Depends, Query, status
 
 router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
 
