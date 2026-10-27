@@ -1,4 +1,4 @@
-from collections.abc import AsyncIterator, Awaitable, Callable
+from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from uuid import uuid4
 
@@ -32,7 +32,7 @@ redis_client = redis.Redis.from_url(
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
     logger.info("application_started", app_name=settings.app_name)
     yield
     redis_client.close()
