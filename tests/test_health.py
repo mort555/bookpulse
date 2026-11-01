@@ -1,54 +1,53 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import redis
 from app.main import app
 from fastapi.testclient import TestClient
 
-client = TestClient(app)
-
 
 def test_health_returns_ok() -> None:
-    with (
-        patch("app.main.engine.connect") as mock_db,
-        patch("app.main.redis_client.ping", return_value=True),
-    ):
-        mock_db.return_value.__enter__.return_value.execute.return_value = None
+    redis_client = MagicMock()
+    redis_client.ping.return_value = True
 
-        response = client.get("/health")
+    with (
+        patch("app.main.engine.connect") as mock_connect,
+        patch("app.main.redis.Redis.from_url", return_value=redis_client),
+    ):
+        mock_connect.return_value.__enter__.return_value.execute.return_value = None
+
+        with TestClient(app) as client:
+            response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {
-        "status": "ok",
-        "db": "ok",
-        "redis": "ok",
-    }
+    assert response.json() == {"status": "ok"}
+    assert "X-Request-ID" in response.headers
 
 
-def test_unknown_route_returns_standard_error() -> None:
-    response = client.get("/not-existing")
+def test_health_returns_503_when_redis_is_unavailable() -> None:
+    redis_client = MagicMock()
+    redis_client.ping.side_effect = redis.RedisError("Redis unavailable")
+
+    with (
+        patch("app.main.engine.connect") as mock_connect,
+        patch("app.main.redis.Redis.from_url", return_value=redis_client),
+    ):
+        mock_connect.return_value.__enter__.return_value.execute.return_value = None
+
+        with TestClient(app) as client:
+            response = client.get("/health")
+
+    assert response.status_code == 503
+    assert response.json() == {"status": "unavailable"}
+
+
+def test_unknown_url_returns_standard_error() -> None:
+    with TestClient(app) as client:
+        response = client.get("/unknown-url")
 
     assert response.status_code == 404
     assert response.json() == {
         "error": {
-            "code": "NOT_FOUND",
+            "label": "NOT_FOUND",
             "message": "Resource not found.",
-            "details": [],
         }
-    }
-
-
-def test_health_returns_503_when_redis_is_unavailable() -> None:
-    with (
-        patch("app.main.engine.connect") as mock_db,
-        patch("app.main.redis_client.ping", side_effect=redis.RedisError),
-    ):
-        mock_db.return_value.__enter__.return_value.execute.return_value = None
-
-        response = client.get("/health")
-
-    assert response.status_code == 503
-    assert response.json() == {
-        "status": "error",
-        "db": "ok",
-        "redis": "error",
     }

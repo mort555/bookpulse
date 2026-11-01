@@ -7,8 +7,6 @@ services:
     ports:
       - "8000:8000"
     environment:
-      APP_NAME: BookPulse
-      APP_VERSION: "0.1.0"
       DEBUG: "false"
       DATABASE_URL: postgresql+psycopg://bookpulse:bookpulse@postgres:5432/bookpulse
       REDIS_URL: redis://redis:6379/0

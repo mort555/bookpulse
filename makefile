@@ -19,4 +19,4 @@ migrate:
 	uv run alembic upgrade head
 
 seed:
-	uv run python -m app.cli seed
+	@echo "Seed command is not implemented in Stage 1."

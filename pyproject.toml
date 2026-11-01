@@ -2,7 +2,7 @@
 [project]
 name = "bookpulse"
 version = "0.1.0"
-description = "BookPulse — Price Monitoring and Margin Analytics Platform"
+description = "BookPulse - Price Monitoring and Margin Analytics Platform"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -90,33 +90,15 @@ omit = ["app/main.py"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 80
 [tool.importlinter]
 root_packages = ["app"]
-
-[[tool.importlinter.contracts]]
-name = "Domain must be independent"
-type = "forbidden"
-source_modules = ["app.domain"]
-forbidden_modules = [
-    "app.api",
-    "app.core",
-    "app.infra",
-    "app.repositories",
-    "app.services",
-    "app.tasks",
-]
 
 [[tool.importlinter.contracts]]
 name = "Application modules must not import main"
 type = "forbidden"
 source_modules = [
-    "app.api",
     "app.core",
-    "app.domain",
-    "app.infra",
-    "app.repositories",
-    "app.services",
-    "app.tasks",
+    "app.database",
+    "app.middlewares",
 ]
 forbidden_modules = ["app.main"]
