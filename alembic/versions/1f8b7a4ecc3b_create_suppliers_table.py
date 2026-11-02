@@ -1,8 +1,8 @@
 """create suppliers table
 
-Revision ID: 1191dec9bef4
+Revision ID: 1f8b7a4ecc3b
 Revises:
-Create Date: 2026-10-27 00:42:19.380866
+Create Date: 2026-11-02 11:58:46.031774
 
 """
 
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "1191dec9bef4"
+revision: str = "1f8b7a4ecc3b"
 down_revision: str | Sequence[str] | None = None
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
