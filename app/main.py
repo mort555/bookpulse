@@ -1,4 +1,4 @@
-from collections.abc import AsyncGenerator
+﻿from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import redis
@@ -12,7 +12,7 @@ from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
 from app.database.session import engine
-from app.middlewares.request_id import RequestIDMiddleware
+from app.middlewares import setup_middlewares
 
 configure_logging()
 
@@ -44,9 +44,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-app.add_middleware(RequestIDMiddleware)
 register_exception_handlers(app)
-
+setup_middlewares(app)
 
 @app.get("/health")
 def health() -> Response:
