@@ -10,14 +10,14 @@ from app.database.base import Base
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[str] = mapped_column(String(150), primary_key=True, index=True)
     username: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     full_name: Mapped[str] = mapped_column(String(255), nullable=True)
     role: Mapped[Roles] = mapped_column(
-        Enum(Roles), nullable=False, default=Roles.VIEWER
+        Enum(Roles, name="user_role_enum"), nullable=False, default=Roles.VIEWER
     )  # Example role field
     weekly_report: Mapped[bool] = mapped_column(
         Boolean, default=True, nullable=False
