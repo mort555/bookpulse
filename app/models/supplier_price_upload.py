@@ -1,6 +1,15 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, String, text
+from sqlalchemy import (
+    DateTime,
+    Enum,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -9,6 +18,11 @@ from app.database.base import Base
 class SupplierPriceUpload(Base):
     __tablename__ = "supplier_price_uploads"
     __table_args__ = (
+        UniqueConstraint(
+            "supplier_id",
+            "file_hash",
+            name="uq_supplier_price_upload_supplier_hash",
+        ),
         Index(
             "ix_supplier_price_uploads_supplier_created_at",
             "supplier_id",
@@ -18,10 +32,10 @@ class SupplierPriceUpload(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     supplier_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("suppliers.id"), unique=True, nullable=False
+        Integer, ForeignKey("suppliers.id"), nullable=False
     )
     file_name: Mapped[str] = mapped_column(String(150), nullable=False)
-    file_hash: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
+    file_hash: Mapped[str] = mapped_column(String(150), nullable=False)
     status: Mapped[Enum] = mapped_column(
         Enum(
             "queued",
@@ -38,7 +52,7 @@ class SupplierPriceUpload(Base):
     error_report_path: Mapped[str | None] = mapped_column(String(500), nullable=True)
     fail_reason: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_by: Mapped[int] = mapped_column(
-        Integer, ForeignKey("suppliers.id"), nullable=False
+        Integer, ForeignKey("users.id"), nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

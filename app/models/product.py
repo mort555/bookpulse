@@ -1,6 +1,14 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, Index, SmallInteger, String, func
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    SmallInteger,
+    String,
+    func,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -9,6 +17,10 @@ from app.database.base import Base
 class Product(Base):
     __tablename__ = "products"
     __table_args__ = (
+        CheckConstraint(
+            "rating BETWEEN 1 AND 5",
+            name="check_product_rating",
+        ),
         Index("ix_products_category_id", "category_id"),
         Index(
             "ix_products_title_trgm",
@@ -21,7 +33,9 @@ class Product(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     upc: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
     title: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)
-    category_id: Mapped[int] = mapped_column(nullable=False)
+    category_id: Mapped[int] = mapped_column(
+        ForeignKey("categories.id"), nullable=False
+    )
 
     description: Mapped[str | None] = mapped_column(String(500), nullable=True)
 

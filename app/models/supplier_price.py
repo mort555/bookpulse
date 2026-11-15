@@ -1,6 +1,13 @@
-from datetime import datetime
+from datetime import date
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, text
+from sqlalchemy import (
+    Date,
+    ForeignKey,
+    Index,
+    Integer,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -9,6 +16,12 @@ from app.database.base import Base
 class SupplierPrice(Base):
     __tablename__ = "supplier_prices"
     __table_args__ = (
+        UniqueConstraint(
+            "supplier_id",
+            "product_id",
+            "valid_from",
+            name="uq_supplier_product_valid_from",
+        ),
         Index(
             "ix_supplier_prices_product_valid_from",
             "product_id",
@@ -28,4 +41,4 @@ class SupplierPrice(Base):
     )
     purchase_price: Mapped[float] = mapped_column(nullable=False)
     stock: Mapped[int] = mapped_column(nullable=False)
-    valid_from: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    valid_from: Mapped[date] = mapped_column(Date, nullable=False)
