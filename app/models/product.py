@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import DateTime, SmallInteger, String, func
+from sqlalchemy import DateTime, Index, SmallInteger, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -8,6 +8,15 @@ from app.database.base import Base
 
 class Product(Base):
     __tablename__ = "products"
+    __table_args__ = (
+        Index("ix_products_category_id", "category_id"),
+        Index(
+            "ix_products_title_trgm",
+            "title",
+            postgresql_using="gin",
+            postgresql_ops={"title": "gin_trgm_ops"},
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     upc: Mapped[str] = mapped_column(String(150), unique=True, nullable=False)

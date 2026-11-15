@@ -5,5 +5,5 @@ class Roles(StrEnum):
     """User roles."""
 
     ADMIN = auto()
-    MANEGER = auto()
+    MANAGER = auto()
     VIEWER = auto()

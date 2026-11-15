@@ -1,6 +1,14 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import CheckConstraint, DateTime, Float, ForeignKey, Integer
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    text,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -35,4 +43,9 @@ class MarketPrice(Base):
     # Правильне оформлення перевірки (check constraint) для залишку >= 0
     __table_args__ = (
         CheckConstraint("in_stock >= 0", name="check_in_stock_not_negative"),
+        Index(
+            "ix_market_prices_product_scraped_at",
+            "product_id",
+            text("scraped_at DESC"),
+        ),
     )

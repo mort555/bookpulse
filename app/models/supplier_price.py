@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Integer
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -8,6 +8,13 @@ from app.database.base import Base
 
 class SupplierPrice(Base):
     __tablename__ = "supplier_prices"
+    __table_args__ = (
+        Index(
+            "ix_supplier_prices_product_valid_from",
+            "product_id",
+            text("valid_from DESC"),
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     supplier_id: Mapped[int] = mapped_column(

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Enum, ForeignKey, Integer, String
+from sqlalchemy import DateTime, Enum, ForeignKey, Index, Integer, String, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database.base import Base
@@ -8,6 +8,13 @@ from app.database.base import Base
 
 class SupplierPriceUpload(Base):
     __tablename__ = "supplier_price_uploads"
+    __table_args__ = (
+        Index(
+            "ix_supplier_price_uploads_supplier_created_at",
+            "supplier_id",
+            text("created_at DESC"),
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     supplier_id: Mapped[int] = mapped_column(
