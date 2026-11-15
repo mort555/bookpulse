@@ -1,21 +1,21 @@
-"""create alert  table
+"""create alerts
 
-Revision ID: e71974702256
-Revises: 0e5a8cba7908
-Create Date: 2026-11-09 13:40:37.351062
+Revision ID: 3e27a14802f2
+Revises: 23c76b5184a0
+Create Date: 2026-11-15 12:39:11.475186
 
 """
-from collections.abc import Sequence
+from typing import Sequence, Union
 
-import sqlalchemy as sa
 from alembic import op
+import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = 'e71974702256'
-down_revision: str | Sequence[str] | None = '0e5a8cba7908'
-branch_labels: str | Sequence[str] | None = None
-depends_on: str | Sequence[str] | None = None
+revision: str = '3e27a14802f2'
+down_revision: Union[str, Sequence[str], None] = '23c76b5184a0'
+branch_labels: Union[str, Sequence[str], None] = None
+depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:

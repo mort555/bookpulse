@@ -54,7 +54,7 @@ class ScrapeRun(Base):
         default=0,
     )
 
-    created_by: Mapped[int | None] = mapped_column(
-        ForeignKey("users.id", ondelete="SET NULL"),
-        nullable=True,
+    created_by: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False,
     )

@@ -1,20 +1,21 @@
-"""create supllier_price  table
+"""create supplier prices
 
-Revision ID: 22105425c7a3
-Revises: 18dd7d3d35cf
-Create Date: 2026-11-09 13:36:30.487598
+Revision ID: b55f04f92f00
+Revises: e7cc4f6c1dcd
+Create Date: 2026-11-15 12:39:18.538933
 
 """
-from collections.abc import Sequence
+from typing import Sequence, Union
 
-import sqlalchemy as sa
 from alembic import op
+import sqlalchemy as sa
+
 
 # revision identifiers, used by Alembic.
-revision: str = '22105425c7a3'
-down_revision: str | Sequence[str] | None = '18dd7d3d35cf'
-branch_labels: str | Sequence[str] | None = None
-depends_on: str | Sequence[str] | None = None
+revision: str = 'b55f04f92f00'
+down_revision: Union[str, Sequence[str], None] = 'e7cc4f6c1dcd'
+branch_labels: Union[str, Sequence[str], None] = None
+depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
@@ -29,8 +30,8 @@ def upgrade() -> None:
     sa.Column('stock', sa.Integer(), nullable=False),
     sa.Column('valid_from', sa.DateTime(), nullable=False),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['supplier_id'], ['supplier.id'], ),
-    sa.ForeignKeyConstraint(['supplier_price_upload_id'], ['supplier_price_upload.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ),
+    sa.ForeignKeyConstraint(['supplier_price_upload_id'], ['supplier_price_uploads.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_supplier_prices_id'), 'supplier_prices', ['id'], unique=False)

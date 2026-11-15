@@ -11,13 +11,13 @@ class SupplierPrice(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     supplier_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("supplier.id"), nullable=False
+        Integer, ForeignKey("suppliers.id"), nullable=False
     )
     product_id: Mapped[int] = mapped_column(
         ForeignKey("products.id", ondelete="CASCADE"), nullable=False
     )
     supplier_price_upload_id: Mapped[int] = mapped_column(
-        ForeignKey("supplier_price_upload.id", ondelete="CASCADE"), nullable=False
+        ForeignKey("supplier_price_uploads.id", ondelete="CASCADE"), nullable=False
     )
     purchase_price: Mapped[float] = mapped_column(nullable=False)
     stock: Mapped[int] = mapped_column(nullable=False)

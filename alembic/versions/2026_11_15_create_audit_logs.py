@@ -1,8 +1,8 @@
-"""create audit_log table
+"""create audit logs
 
-Revision ID: 8130fd563fa8
-Revises: 508c10e06bcb
-Create Date: 2026-11-15 02:55:37.677958
+Revision ID: c9362433c8f4
+Revises: 082ca31f98fd
+Create Date: 2026-11-15 12:38:57.564203
 
 """
 
@@ -13,8 +13,8 @@ from alembic import op
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "8130fd563fa8"
-down_revision: str | Sequence[str] | None = "508c10e06bcb"
+revision: str = "c9362433c8f4"
+down_revision: str | Sequence[str] | None = "082ca31f98fd"
 branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
@@ -25,7 +25,7 @@ def upgrade() -> None:
     op.create_table(
         "audit_logs",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("user_id", sa.Integer(), nullable=True),
+        sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("action", sa.String(length=150), nullable=False),
         sa.Column("entity", sa.String(length=150), nullable=False),
         sa.Column("entity_id", sa.Integer(), nullable=False),

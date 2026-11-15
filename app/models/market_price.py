@@ -16,9 +16,9 @@ class MarketPrice(Base):
         ForeignKey("products.id", ondelete="CASCADE"), nullable=False
     )
 
-    # Згідно зі специфікацією: FK та nullable=True
-    scrape_run_id: Mapped[int | None] = mapped_column(
-        ForeignKey("scrape_runs.id", ondelete="SET NULL"), nullable=True
+    # Обов'язкове посилання на запуск скрапінгу.
+    scrape_run_id: Mapped[int] = mapped_column(
+        ForeignKey("scrape_runs.id"), nullable=False
     )
 
     price_incl_tax: Mapped[float] = mapped_column(Float, nullable=False)

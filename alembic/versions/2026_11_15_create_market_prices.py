@@ -1,20 +1,21 @@
-"""create marketprice table
+"""create market prices
 
-Revision ID: 40448a29d917
-Revises: 155e3b684252
-Create Date: 2026-11-09 12:55:32.799506
+Revision ID: e7cc4f6c1dcd
+Revises: 3e27a14802f2
+Create Date: 2026-11-15 12:39:14.966708
 
 """
-from collections.abc import Sequence
+from typing import Sequence, Union
 
-import sqlalchemy as sa
 from alembic import op
+import sqlalchemy as sa
+
 
 # revision identifiers, used by Alembic.
-revision: str = '40448a29d917'
-down_revision: str | Sequence[str] | None = '155e3b684252'
-branch_labels: str | Sequence[str] | None = None
-depends_on: str | Sequence[str] | None = None
+revision: str = 'e7cc4f6c1dcd'
+down_revision: Union[str, Sequence[str], None] = '3e27a14802f2'
+branch_labels: Union[str, Sequence[str], None] = None
+depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
@@ -23,7 +24,7 @@ def upgrade() -> None:
     op.create_table('market_prices',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
-    sa.Column('scrape_run_id', sa.Integer(), nullable=True),
+    sa.Column('scrape_run_id', sa.Integer(), nullable=False),
     sa.Column('price_incl_tax', sa.Float(), nullable=False),
     sa.Column('price_excl_tax', sa.Float(), nullable=False),
     sa.Column('tax', sa.Float(), nullable=False),
@@ -31,7 +32,7 @@ def upgrade() -> None:
     sa.Column('scraped_at', sa.DateTime(), nullable=False),
     sa.CheckConstraint('in_stock >= 0', name='check_in_stock_not_negative'),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['scrape_run_id'], ['scrape_runs.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['scrape_run_id'], ['scrape_runs.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_market_prices_id'), 'market_prices', ['id'], unique=False)
