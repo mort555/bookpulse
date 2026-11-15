@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, ForeignKey, String, func
+from sqlalchemy import DateTime, ForeignKey, Integer, String, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -12,11 +12,11 @@ class Alert(Base):
     __tablename__ = "alerts"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    rule_id: Mapped[str] = mapped_column(
-        String(150), ForeignKey("alert_rules.id"), nullable=False
+    rule_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("alert_rules.id"), nullable=False
     )
     product_id: Mapped[int] = mapped_column(
-        ForeignKey("products.id", ondelete="CASCADE"), nullable=False
+        Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False
     )
     message: Mapped[str] = mapped_column(String(500), nullable=False)
 

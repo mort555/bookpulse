@@ -24,3 +24,7 @@ def configure_logging() -> None:
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
+
+
+# ✅ Додай цей рядок у файл app/core/logging.py, щоб його можна було імпортувати
+logger = structlog.get_logger()

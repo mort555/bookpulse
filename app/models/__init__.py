@@ -1,19 +1,27 @@
-from app.models.alert_rules import AlertRule
-from app.models.alerts import Alert
-from app.models.categories import Categories
-from app.models.market_prices import MarketPrice
+from app.models.alert import Alert
+from app.models.alert_rule import AlertRule
+from app.models.audit_log import AuditLog
+from app.models.category import Category
+from app.models.market_price import MarketPrice
 from app.models.product import Product
-from app.models.scrape_runs import ScrapeRun
-from app.models.suppliers import Supplier
-from app.models.users import User
+from app.models.report import Report
+from app.models.scrape_run import ScrapeRun
+from app.models.supplier import Supplier
+from app.models.supplier_price import SupplierPrice
+from app.models.supplier_price_upload import SupplierPriceUpload
+from app.models.user import User
 
 __all__ = [
-    "Supplier",
     "User",
+    "Category",
     "Product",
-    "Categories",
-    "MarketPrice",
     "ScrapeRun",
-    "Alert",
+    "MarketPrice",
+    "Supplier",
+    "SupplierPriceUpload",
+    "SupplierPrice",
     "AlertRule",
+    "Alert",
+    "Report",
+    "AuditLog",
 ]

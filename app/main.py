@@ -8,6 +8,9 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.responses import JSONResponse, Response
 
+# 1. Імпортуємо наш роутер авторизації
+# ✅ Правильно
+from app.api import api_router as auth_router
 from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
@@ -34,7 +37,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     redis_client.close()
-    engine.dispose()
+    await engine.dispose()
     logger.info("application_stopped")
 
 
@@ -47,11 +50,15 @@ app = FastAPI(
 register_exception_handlers(app)
 setup_middlewares(app)
 
+# 2. Обов'язково підключаємо роутер до додатка!
+app.include_router(auth_router)
+
+
 @app.get("/health")
 def health() -> Response:
     try:
-        with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
+        with engine.connect() as connection: # type: ignore
+            connection.execute(text("SELECT 1")) # type: ignore
 
         redis_client = redis.Redis.from_url(
             settings.redis_url,

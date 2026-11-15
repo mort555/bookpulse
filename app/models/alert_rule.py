@@ -7,7 +7,7 @@ from app.database.base import Base
 class AlertRule(Base):
     __tablename__ = "alert_rules"
 
-    id: Mapped[str] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
     user_id: Mapped[str] = mapped_column(
         String(150), ForeignKey("users.id"), nullable=False
     )

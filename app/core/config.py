@@ -14,38 +14,24 @@ class Settings(BaseSettings):
 
     debug: bool = False
 
-    postgres_db: str = Field(
-        default="bookpulse",
-        repr=False,
-    )
-    postgres_user: str = Field(
-        default="bookpulse",
-        repr=False,
-    )
+    # Database
+    postgres_db: str = Field(default="bookpulse", repr=False)
+    postgres_user: str = Field(default="bookpulse", repr=False)
+    postgres_password: str = Field(default="bookpulse", repr=False)
+    postgres_port: int = Field(default=5433, repr=False)
+    postgres_host: str = Field(default="localhost", repr=False)
 
-    postgres_password: str = Field(
-        default="bookpulse",
-        repr=False,
-    )
-    postgres_port: int = Field(
-        default=5433,
-        repr=False,
-    )
-    postgres_host: str = Field(
-        default="localhost",
-        repr=False,
-    )
-    redis_url: str = Field(
-        default="redis://localhost:6379/0",
-        repr=False,
-    )
+    # Redis
+    redis_url: str = Field(default="redis://localhost:6379/0", repr=False)
 
+    # JWT Auth settings
     jwt_secret_key: str = Field(
         default="change-this-secret-key-in-production",
         repr=False,
     )
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 7
 
     @property
     def database_url(self) -> str:
