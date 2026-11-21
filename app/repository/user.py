@@ -9,11 +9,11 @@ async def get_user_by_email(email: str, db: AsyncSession) -> User | None:
     return result.scalar_one_or_none()
 
 
-async def create_user(body: UserCreationSchema, db: AsyncSession) -> User:
+async def create_user(data: UserCreationSchema, db: AsyncSession) -> User: #dto в папці домейн
     new_user = User(
-        username=body.username,
-        email=body.email,
-        hashed_password=body.password,
+        username=data.username,
+        email=data.email,
+        hashed_password=data.password,
     )
     db.add(new_user)
     await db.commit()
@@ -21,10 +21,3 @@ async def create_user(body: UserCreationSchema, db: AsyncSession) -> User:
     return new_user
 
 
-async def update_token(user: User, token: str | None, db: AsyncSession) -> None:
-    """Оновлення або скидання refresh токена користувача."""
-    # Використовуємо setattr або додаємо # type: ignore, щоб Mypy не сварився на атрибут
-    user.refresh_token = token # type: ignore
-    db.add(user)
-    await db.commit()
-    await db.refresh(user)

@@ -14,7 +14,8 @@ from app.services.auth import auth_service
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Модуль-левельні синглтони для залежностей (уникнення викликів функцій у дефолтах аргументів)
+# Модуль-левельні синглтони для залежностей (уникнення викликів функцій у 
+# дефолтах аргументів)
 get_refresh_token = HTTPBearer()
 
 DbSessionDep = Depends(get_db)

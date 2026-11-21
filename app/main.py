@@ -14,6 +14,7 @@ from app.api import api_router as auth_router
 from app.core.config import get_settings
 from app.core.exceptions import register_exception_handlers
 from app.core.logging import configure_logging
+from app.database.redis import close_redis, create_redis_client
 from app.database.session import engine
 from app.middlewares import setup_middlewares
 
@@ -24,7 +25,9 @@ logger = structlog.get_logger()
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(application: FastAPI) -> AsyncGenerator[None, None]:
+    async_redis_client = create_redis_client()
+    application.state.redis = async_redis_client
     redis_client = redis.Redis.from_url(
         settings.redis_url,
         decode_responses=True,
@@ -37,6 +40,7 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     redis_client.close()
+    await close_redis(async_redis_client)
     await engine.dispose()
     logger.info("application_stopped")
 
