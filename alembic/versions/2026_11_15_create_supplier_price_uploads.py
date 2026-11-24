@@ -35,11 +35,14 @@ def upgrade() -> None:
     sa.Column('created_by', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('finished_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['created_by'], ['suppliers.id'], ),
+    sa.ForeignKeyConstraint(['created_by'], ['users.id'], ),
     sa.ForeignKeyConstraint(['supplier_id'], ['suppliers.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('file_hash'),
-    sa.UniqueConstraint('supplier_id')
+    sa.UniqueConstraint(
+        'supplier_id',
+        'file_hash',
+        name='uq_supplier_price_upload_supplier_hash',
+    )
     )
     op.create_index(op.f('ix_supplier_price_uploads_id'), 'supplier_price_uploads', ['id'], unique=False)
     # ### end Alembic commands ###

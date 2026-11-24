@@ -26,10 +26,10 @@ def upgrade() -> None:
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('type', sa.Enum('analysis', 'summary', name='ReportType'), nullable=False),
     sa.Column('params', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
-    sa.Column('status', sa.Enum('queued', 'running', 'failed', name='ReportStatusEnum'), nullable=False),
+    sa.Column('status', sa.Enum('queued', 'running', 'done', 'failed', name='ReportStatusEnum'), nullable=False),
     sa.Column('file_path', sa.String(length=500), nullable=True),
-    sa.Column('created_at', sa.String(length=150), nullable=False),
-    sa.Column('expires_at', sa.String(length=150), nullable=True),
+    sa.Column('created_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('expires_at', sa.DateTime(timezone=True), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -45,7 +45,7 @@ def downgrade() -> None:
     sa.Enum('analysis', 'summary', name='ReportType').drop(
         op.get_bind(), checkfirst=True
     )
-    sa.Enum('queued', 'running', 'failed', name='ReportStatusEnum').drop(
+    sa.Enum('queued', 'running', 'done', 'failed', name='ReportStatusEnum').drop(
         op.get_bind(), checkfirst=True
     )
     # ### end Alembic commands ###

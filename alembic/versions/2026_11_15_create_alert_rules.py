@@ -25,13 +25,24 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('type', sa.Enum('market_price_drop', 'margin_below', 'out_of_stock', name='alert_rule_type_enum'), nullable=False),
-    sa.Column('product_id', sa.Integer(), nullable=False),
-    sa.Column('category_id', sa.Integer(), nullable=False),
+    sa.Column('product_id', sa.Integer(), nullable=True),
+    sa.Column('category_id', sa.Integer(), nullable=True),
     sa.Column('threshold', sa.Numeric(precision=6, scale=2), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.CheckConstraint(
+        '(product_id IS NOT NULL AND category_id IS NULL) OR '
+        '(product_id IS NULL AND category_id IS NOT NULL)',
+        name='check_alert_rule_one_target',
+    ),
+    sa.CheckConstraint(
+        "(type = 'out_of_stock' AND threshold IS NULL) OR "
+        "(type IN ('market_price_drop', 'margin_below') "
+        "AND threshold IS NOT NULL)",
+        name='check_alert_rule_threshold',
+    ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_alert_rules_id'), 'alert_rules', ['id'], unique=False)
